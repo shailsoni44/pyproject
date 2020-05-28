@@ -14,3 +14,5 @@ from django.core.wsgi import get_wsgi_application
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pyproject20.settings')
 
 application = get_wsgi_application()
+
+#wsgi stands for web server gateway interface
