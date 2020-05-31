@@ -24,5 +24,5 @@ urlpatterns = [
     # path("",views.home, name="home"),
     # path("about",views.about),
     # path("contact_us",views.contacts, name="contact"),
-    path("firstapp/", include("firstapp.urls"))
+    path("firstapp/", include("firstapp.urls")),
 ]
