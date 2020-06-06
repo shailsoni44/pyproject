@@ -58,16 +58,41 @@ def checkpass(password):
     # 
 
 # Form using ModelForm
-class Registerform(forms.ModelForm): 
-    password = forms.CharField(widget=forms.PasswordInput, validators=[checkpass])
+class Registerform(forms.ModelForm):
+    
+    password = forms.CharField(widget=forms.PasswordInput,) #validators=[checkpass])
     class Meta:
         model=Register
         #fields="__all__"
         include=["first_name","last_name","email","repeat_email"]
         exclude=[]
 
-    def clean(self):
-        email=self.cleaned_data['email']
-        remail=self.cleaned_data['repeat_email']
-        if email!=remail:
-            raise forms.ValidationError("email doesn't match")        
+    # def clean(self):
+    #     email=self.cleaned_data['email']
+    #     remail=self.cleaned_data['repeat_email']
+    #     if email!=remail:
+    #         raise forms.ValidationError("email doesn't match")
+
+    # def checkpass(self):  #NOT WORKING INSIDE CLASS
+    #     super(Registerform.self).clean()
+    #     password =self.cleaned_data.get('password')
+    #     if len(password)>=5:
+    #         raise forms.ValidationError("Please choose password with less than 5 charactors")
+
+    def cleanpass(self):
+        super(Registeration,self).clean()
+
+        password = self.cleaned_data.get('password')
+        UpperPass = 0
+        LowerPass = 0
+        digitPass = 0
+        spChar = ''
+        UpperPass = sum(1 for i in password if i.isupper())
+        LowerPass = sum(1 for i in password if i.isupper())
+        digitPass = sum(1 for i in password if i.isdigit())
+        spChar = re.sub('[\w]+', '', password)
+
+        if ((UpperPass < 1) or (LowerPass < 1) or (digitPass < 1) or (len(spChar) < 1)):
+            self._errors['password'] = self.error_class(["Password needs to have at-least 1 lower case letter, 1 upper case letter, 1 digit, and 1 special character"])
+
+       

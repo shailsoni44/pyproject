@@ -1,7 +1,14 @@
 from django.shortcuts import render,redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from firstapp import forms
-from .models import Register 
+from .models import Register, Signup, Session
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .serializers import RegisterSerializer, SignupSerializer, SessionSerializer
+from django.views.generic import TemplateView
+from rest_framework import viewsets
+from . import models
+from . import serializers
 
 # Create your views here.
 
@@ -42,10 +49,35 @@ def success(request):
     return render(request,"firstapp/success.html",{'people':people})
 
 def destroy(request,id):
-    people=Register.object.get(id=id)
-    people.delete()
+    person=Register.object.get(id=id)
+    person.delete()
     return redirect("/show")
 
 def edit(request,id):
     people=Register.object.get(id=id)
-    return render(request,"firstapp/success.html",{'people':people})        
+    return render(request,"firstapp/success.html",{'people':people})
+
+def random(request):
+    data={1:{'name':'Shail','age':26}, 2:{'name':'abc','age':30}}
+    return JsonResponse(data)        
+
+class LoginList(APIView):
+    def get(self,request):
+        values=Register.objects.all()
+        serializer=RegisterSerializer(values, many=True)
+        return Response(serializer.data)
+
+class SignupList(TemplateView):
+    template_name='firstapp/index.html'
+
+class RegisterViewSet(viewsets.ModelViewSet):
+    queryset=models.Register.objects.all()
+    serializer_class=serializers.RegisterSerializer    
+
+class SessionViewSet(viewsets.ModelViewSet):
+    queryset=models.Session.objects.all()
+    serializer_class=serializers.SessionSerializer
+
+class SignupViewSet(viewsets.ModelViewSet):
+    queryset=models.Signup.objects.all()
+    serializer_class=serializers.SignupSerializer

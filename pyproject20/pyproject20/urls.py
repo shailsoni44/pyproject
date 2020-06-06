@@ -16,6 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path , include
 # from firstapp import views
+from rest_framework import routers
+from firstapp import views
+
+router = routers.DefaultRouter()
+router.register(r'registerapi',views.RegisterViewSet)
+router.register(r'signupapi',views.SignupViewSet)
+router.register(r'sessionapi',views.SessionViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,4 +32,5 @@ urlpatterns = [
     # path("about",views.about),
     # path("contact_us",views.contacts, name="contact"),
     path("firstapp/", include("firstapp.urls")),
+    path('', include(router.urls)),
 ]

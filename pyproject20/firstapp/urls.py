@@ -10,4 +10,7 @@ urlpatterns = [
     path("register",views.form_view, name="register"),
     path("success",views.success, name="success"),
     path("destroy/<int: id>",views.destroy, name="destroy"),
+    path("json",views.random, name="json"),
+    path("api",views.LoginList.as_view()),
+    path("api_success",views.SignupList.as_view()),
 ]
